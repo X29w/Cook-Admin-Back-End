@@ -14,6 +14,7 @@ import { FruitService } from './fruit.service';
 import { CreateFruitDto } from './dto/create-fruit.dto';
 import { UpdateFruitDto } from './dto/update-fruit.dto';
 import { generateParseIntPipe } from 'src/utils';
+import { RequiredLogin } from 'src/custom.decorator';
 
 @Controller('fruit')
 export class FruitController {
@@ -22,6 +23,7 @@ export class FruitController {
 
   //#region 新增水果
   @Post()
+  @RequiredLogin()
   create(@Body() createFruitDto: CreateFruitDto) {
     return this.fruitService.create(createFruitDto);
   }
@@ -29,6 +31,7 @@ export class FruitController {
 
   //#region 查询水果列表
   @Get()
+  @RequiredLogin()
   findAll(
     @Query('current', new DefaultValuePipe(1), generateParseIntPipe('current'))
     current: number,
@@ -46,6 +49,7 @@ export class FruitController {
 
   //#region 查询水果详情
   @Get(':id')
+  @RequiredLogin()
   findOne(@Param('id') id: string) {
     return this.fruitService.findOne(+id);
   }
@@ -53,6 +57,7 @@ export class FruitController {
 
   //#region 更新水果
   @Patch(':id')
+  @RequiredLogin()
   update(@Param('id') id: string, @Body() updateFruitDto: UpdateFruitDto) {
     return this.fruitService.update(+id, updateFruitDto);
   }
@@ -60,6 +65,7 @@ export class FruitController {
 
   //#region 删除水果
   @Delete(':id')
+  @RequiredLogin()
   remove(@Param('id') id: string) {
     return this.fruitService.remove(+id);
   }

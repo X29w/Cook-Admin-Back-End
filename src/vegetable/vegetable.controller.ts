@@ -14,6 +14,7 @@ import { VegetableService } from './vegetable.service';
 import { CreateVegetableDto } from './dto/create-vegetable.dto';
 import { UpdateVegetableDto } from './dto/update-vegetable.dto';
 import { generateParseIntPipe } from 'src/utils';
+import { RequiredLogin } from 'src/custom.decorator';
 
 @Controller('vegetable')
 export class VegetableController {
@@ -22,6 +23,7 @@ export class VegetableController {
 
   //#region 增加蔬菜
   @Post('create')
+  @RequiredLogin()
   async create(@Body() createVegetableDto: CreateVegetableDto) {
     return await this.vegetableService.create(createVegetableDto);
   }
@@ -29,6 +31,7 @@ export class VegetableController {
 
   //#region 获取蔬菜列表
   @Get('list')
+  @RequiredLogin()
   async findAll(
     @Query('current', new DefaultValuePipe(1), generateParseIntPipe('current'))
     current: number,
@@ -46,6 +49,7 @@ export class VegetableController {
 
   //#region 获取蔬菜详情
   @Get(':id')
+  @RequiredLogin()
   async findOne(@Param('id') id: number) {
     return await this.vegetableService.findOne(id);
   }
@@ -53,6 +57,7 @@ export class VegetableController {
 
   //#region 更新蔬菜
   @Patch(':id')
+  @RequiredLogin()
   async update(
     @Param('id') id: number,
     @Body() updateVegetableDto: UpdateVegetableDto,
@@ -63,6 +68,7 @@ export class VegetableController {
 
   //#region 删除蔬菜
   @Delete(':id')
+  @RequiredLogin()
   async remove(@Param('id') id: number) {
     return await this.vegetableService.remove(id);
   }

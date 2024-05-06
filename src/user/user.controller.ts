@@ -6,7 +6,7 @@ import { RedisService } from 'src/redis/redis.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UserInfo } from 'src/custom.decorator';
+import { RequiredLogin, UserInfo } from 'src/custom.decorator';
 
 @Controller('user')
 export class UserController {
@@ -80,6 +80,7 @@ export class UserController {
 
   //#region 查看用户信息
   @Get('/getUserInfo')
+  @RequiredLogin()
   async getUserInfo(@UserInfo('id') id: number) {
     return await this.userService.getUserInfo(id);
   }
@@ -87,6 +88,7 @@ export class UserController {
 
   //#region 修改用户信息
   @Post('/updateUserInfo')
+  @RequiredLogin()
   async updateUserInfo(@UserInfo('id') id: number, @Body() body: any) {
     return await this.userService.updateUserInfo(id, body);
   }

@@ -14,6 +14,7 @@ import { MeatService } from './meat.service';
 import { CreateMeatDto } from './dto/create-meat.dto';
 import { UpdateMeatDto } from './dto/update-meat.dto';
 import { generateParseIntPipe } from 'src/utils';
+import { RequiredLogin } from 'src/custom.decorator';
 
 @Controller('meat')
 export class MeatController {
@@ -22,6 +23,7 @@ export class MeatController {
 
   //#region 新增肉类
   @Post()
+  @RequiredLogin()
   create(@Body() createMeatDto: CreateMeatDto) {
     return this.meatService.create(createMeatDto);
   }
@@ -29,6 +31,7 @@ export class MeatController {
 
   //#region 查询肉类列表
   @Get()
+  @RequiredLogin()
   findAll(
     @Query('current', new DefaultValuePipe(1), generateParseIntPipe('current'))
     current: number,
@@ -46,6 +49,7 @@ export class MeatController {
 
   //#region 查询肉类详情
   @Get(':id')
+  @RequiredLogin()
   findOne(@Param('id') id: string) {
     return this.meatService.findOne(+id);
   }
@@ -53,6 +57,7 @@ export class MeatController {
 
   //#region 更新肉类
   @Patch(':id')
+  @RequiredLogin()
   update(@Param('id') id: string, @Body() updateMeatDto: UpdateMeatDto) {
     return this.meatService.update(+id, updateMeatDto);
   }
@@ -60,6 +65,7 @@ export class MeatController {
 
   //#region 删除肉类
   @Delete(':id')
+  @RequiredLogin()
   remove(@Param('id') id: string) {
     return this.meatService.remove(+id);
   }
