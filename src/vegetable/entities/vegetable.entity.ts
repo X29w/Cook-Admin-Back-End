@@ -14,6 +14,9 @@ export class Vegetable {
 
   @Column({
     comment: '蔬菜价格',
+    type: 'decimal',
+    precision: 10, // 精度
+    scale: 2, // 标度
   })
   price: number;
 
@@ -31,10 +34,4 @@ export class Vegetable {
     comment: '蔬菜保质期至',
   })
   shelfLife: Date;
-
-  @Column({
-    comment: '蔬菜是否过期',
-    default: false,
-  })
-  isExpired: boolean;
 }

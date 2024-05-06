@@ -6,6 +6,9 @@ export class CreateUserDto {
   })
   name: string;
 
+  @IsNotEmpty({
+    message: '请输入邮箱地址',
+  })
   @IsEmail(
     {},
     {

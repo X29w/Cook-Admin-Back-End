@@ -12,6 +12,10 @@ import { Fruit } from './fruit/entities/fruit.entity';
 import { Vegetable } from './vegetable/entities/vegetable.entity';
 import { Meat } from './meat/entities/meat.entity';
 import { RedisModule } from './redis/redis.module';
+import { EmailModule } from './email/email.module';
+import { JwtModule } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { LoginGuard } from './login.guard';
 
 @Module({
   imports: [
@@ -38,13 +42,30 @@ import { RedisModule } from './redis/redis.module';
       isGlobal: true,
       envFilePath: 'src/.env',
     }),
+    JwtModule.registerAsync({
+      global: true,
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'),
+        signOptions: {
+          expiresIn: '1h',
+        },
+      }),
+      inject: [ConfigService],
+    }),
     VegetableModule,
     UserModule,
     FruitModule,
     MeatModule,
     RedisModule,
+    EmailModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: LoginGuard,
+    },
+  ],
 })
 export class AppModule {}

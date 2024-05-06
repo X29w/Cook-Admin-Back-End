@@ -31,10 +31,4 @@ export class Fruit {
     comment: '水果保质期至',
   })
   shelfLife: Date;
-
-  @Column({
-    comment: '水果是否过期',
-    default: false,
-  })
-  isExpired: boolean;
 }
