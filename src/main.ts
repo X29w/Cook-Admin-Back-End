@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { FormatResponseInterceptor } from './format-response.interceptor';
 import { UnloginFilter } from './unlogin.filter';
 import { CustomExceptionFilter } from './custom-exception.filter';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +12,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new FormatResponseInterceptor());
   app.useGlobalFilters(new UnloginFilter());
   app.useGlobalFilters(new CustomExceptionFilter());
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+  await app.listen(configService.get('NEST_PORT'));
 }
 bootstrap();

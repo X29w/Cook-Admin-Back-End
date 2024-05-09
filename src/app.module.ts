@@ -7,15 +7,18 @@ import { VegetableModule } from './vegetable/vegetable.module';
 import { UserModule } from './user/user.module';
 import { FruitModule } from './fruit/fruit.module';
 import { MeatModule } from './meat/meat.module';
-import { User } from './user/entities/user.entity';
-import { Fruit } from './fruit/entities/fruit.entity';
-import { Vegetable } from './vegetable/entities/vegetable.entity';
-import { Meat } from './meat/entities/meat.entity';
 import { RedisModule } from './redis/redis.module';
 import { EmailModule } from './email/email.module';
 import { JwtModule } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { LoginGuard } from './login.guard';
+import { User } from './user/entities/user.entity';
+import { Fruit } from './fruit/entities/fruit.entity';
+import { Vegetable } from './vegetable/entities/vegetable.entity';
+import { Meat } from './meat/entities/meat.entity';
+import * as path from 'path';
+
+console.log('===================', path.join(__dirname, '.env'));
 
 @Module({
   imports: [
@@ -40,7 +43,7 @@ import { LoginGuard } from './login.guard';
     }),
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: 'src/.env',
+      envFilePath: path.join(__dirname, '.env'),
     }),
     JwtModule.registerAsync({
       global: true,

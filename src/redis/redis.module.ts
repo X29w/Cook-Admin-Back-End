@@ -10,6 +10,11 @@ import { ConfigService } from '@nestjs/config';
     {
       provide: 'REDIS_CLIENT',
       useFactory: async (configService: ConfigService) => {
+        console.log(
+          'REDIS_SERVER_HOST',
+          configService.get('REDIS_SERVER_HOST'),
+        );
+
         const client = createClient({
           socket: {
             host: configService.get('REDIS_SERVER_HOST'),
