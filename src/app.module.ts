@@ -18,8 +18,6 @@ import { Vegetable } from './vegetable/entities/vegetable.entity';
 import { Meat } from './meat/entities/meat.entity';
 import * as path from 'path';
 
-console.log('===================', path.join(__dirname, '.env'));
-
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({

@@ -9,7 +9,6 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { UnloginFilter } from './unlogin.filter';
 
 interface JwtUserData {
   id: number;
@@ -27,34 +26,36 @@ declare module 'express' {
 @Injectable()
 export class LoginGuard implements CanActivate {
   @Inject()
-  private reflector: Reflector; // 注入反射器
+  private reflector: Reflector;
 
   @Inject(JwtService)
-  private jwtService: JwtService; // 注入JwtService
+  private jwtService: JwtService;
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const requset: Request = context.switchToHttp().getRequest();
+    const request: Request = context.switchToHttp().getRequest();
 
-    const requiredLogin = this.reflector.getAllAndOverride<boolean>('login', [
-      context.getHandler(),
+    const requireLogin = this.reflector.getAllAndOverride('login', [
       context.getClass(),
+      context.getHandler(),
     ]);
 
-    if (!requiredLogin) {
+    if (!requireLogin) {
       return true;
     }
-    const authorization = requset.headers.authorization;
+
+    const authorization = request.headers.authorization;
 
     if (!authorization) {
-      throw new UnloginFilter();
+      throw new UnauthorizedException('用户未登录');
     }
 
     try {
       const token = authorization.split(' ')[1];
-      const data = this.jwtService.verify(token);
-      requset.user = {
+      const data = this.jwtService.verify<JwtUserData>(token);
+
+      request.user = {
         id: data.id,
         name: data.name,
         email: data.email,
@@ -62,7 +63,7 @@ export class LoginGuard implements CanActivate {
       };
       return true;
     } catch (error) {
-      throw new UnauthorizedException('登录过期了');
+      throw new UnauthorizedException('token 失效，请重新登录');
     }
   }
 }
