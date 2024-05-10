@@ -6,7 +6,7 @@ import {
 import { Request } from 'express';
 
 //#region 登录鉴权装饰器
-export const RequiredLogin = () => SetMetadata('requiredLogin', true);
+export const RequiredLogin = () => SetMetadata('login', true);
 //#endregion
 
 //#region 自定义参数装饰器
