@@ -18,6 +18,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
       .json({
         code: exception.getStatus(),
         message: 'fail',
+        success: false,
         data: res?.message?.join ? res?.message?.join(',') : exception.message,
       })
       .end();
